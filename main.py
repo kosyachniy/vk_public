@@ -1,5 +1,5 @@
 from func.vk_group import *
-import json, time, rand
+import json, time, random
 
 GROUP_ID = -150439171
 
@@ -21,7 +21,7 @@ def process(mes):
 
 #Картинки
 			if u['type'] == 'photo':
-				y = {'type': 'image', 'url': max_size(u['photo']), 'from': u['photo']['owner_id'], 'id': u['photo']['id'], 'album': u['photo']['album_id']}
+				attachments.append({'type': 'image', 'url': max_size(u['photo']), 'from': u['photo']['owner_id'], 'id': u['photo']['id'], 'album': u['photo']['album_id']})
 
 	return attachments
 
@@ -39,8 +39,12 @@ while True:
 				groups[group] = post['id']
 
 				if post['likes']['count'] / post['views']['count'] > 0.05:
-					vks.method('wall.post', {'owner_id': GROUP_ID, 'message': post['text'], 'attachments': })
-					time.sleep(rand.randint(100, 1000))
+					a = ','.join(['photo%s_%d' % (i['from'], i['id']) for i in process(post)])
+
+					if post['text'] or a:
+						print(post['id'], a)
+						vks.method('wall.post', {'owner_id': GROUP_ID, 'message': post['text'], 'attachments': a})
+						time.sleep(random.randint(100, 1000))
 
 		with open('set.json', 'w') as file:
 			print(json.dumps({'groups': groups}, indent=4), file=file)
