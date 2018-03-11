@@ -1,7 +1,7 @@
 from func.vk_group import *
 import json, time, random
 
-GROUP_ID = -150439171
+GROUP_ID = -163409528
 
 ''''''
 
@@ -31,23 +31,27 @@ with open('set.json', 'r') as file:
 	groups = json.loads(file.read())['groups']
 
 while True:
-	for group in groups:
-		posts = vks.method('wall.get', {'owner_id': group, 'count': 10})['items'] #, 'offset': groups[group]
+	try:
+		for group in groups:
+			posts = vks.method('wall.get', {'owner_id': group, 'count': 10})['items'] #, 'offset': groups[group]
 
-		for post in posts[::-1]:
-			if post['id'] > groups[group] and time.time() - post['date'] > 600:
-				groups[group] = post['id']
+			for post in posts[::-1]:
+				if post['id'] > groups[group] and time.time() - post['date'] > 600:
+					groups[group] = post['id']
 
-				if post['likes']['count'] / post['views']['count'] > 0.05:
-					a = ','.join(['photo%s_%d' % (i['from'], i['id']) for i in process(post)])
+					if post['likes']['count'] / post['views']['count'] > 0.05:
+						a = ','.join(['photo%s_%d' % (i['from'], i['id']) for i in process(post)])
 
-					if post['text'] or a:
-						print(post['id'], a)
-						vks.method('wall.post', {'owner_id': GROUP_ID, 'message': post['text'], 'attachments': a})
-						time.sleep(random.randint(100, 1000))
+						if post['text'] or a:
+							print(post['id'], a)
+							vks.method('wall.post', {'owner_id': GROUP_ID, 'message': post['text'], 'attachments': a})
+							time.sleep(random.randint(60, 600))
 
+			time.sleep(1)
+		time.sleep(60)
+
+	except:
 		with open('set.json', 'w') as file:
 			print(json.dumps({'groups': groups}, indent=4), file=file)
 
-		time.sleep(1)
-	time.sleep(60)
+		break
