@@ -60,8 +60,9 @@ while True:
 			time.sleep(1)
 		#time.sleep(60)
 
-	except:
+	except Exception as msg:
 		with open('set.json', 'w') as file:
 			print(json.dumps({'groups': groups}, indent=4), file=file)
 
+		print(msg[2])
 		break
