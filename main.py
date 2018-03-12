@@ -44,11 +44,19 @@ while True:
 
 						if post['text'] or a:
 							print(post['id'], a)
-							vks.method('wall.post', {'owner_id': GROUP_ID, 'message': post['text'], 'attachments': a})
-							time.sleep(random.randint(60, 600))
+
+							try:
+								vks.method('wall.post', {'owner_id': GROUP_ID, 'message': post['text'], 'attachments': a})
+							except:
+								acc = 1 - acc
+
+								vk = vk_api.VkApi(login=s[acc][0], password=s[acc][1])
+								vk.auth()
+
+							time.sleep(random.randint(300, 3600))
 
 			time.sleep(1)
-		time.sleep(60)
+		#time.sleep(60)
 
 	except:
 		with open('set.json', 'w') as file:
