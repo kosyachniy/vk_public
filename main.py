@@ -1,4 +1,4 @@
-from func.vk_group import *
+from func.vk_user import *
 import json, time, random
 
 GROUP_ID = -163409528
