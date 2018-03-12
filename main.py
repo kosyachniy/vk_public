@@ -33,7 +33,7 @@ with open('set.json', 'r') as file:
 while True:
 	try:
 		for group in groups:
-			posts = vks.method('wall.get', {'owner_id': group, 'count': 10})['items'] #, 'offset': groups[group]
+			posts = vk.method('wall.get', {'owner_id': group, 'count': 10})['items'] #, 'offset': groups[group]
 
 			for post in posts[::-1]:
 				if post['id'] > groups[group] and time.time() - post['date'] > 600:
@@ -46,12 +46,14 @@ while True:
 							print(post['id'], a)
 
 							try:
-								vks.method('wall.post', {'owner_id': GROUP_ID, 'message': post['text'], 'attachments': a})
+								vk.method('wall.post', {'owner_id': GROUP_ID, 'message': post['text'], 'attachments': a})
 							except:
 								acc = 1 - acc
 
 								vk = vk_api.VkApi(login=s[acc][0], password=s[acc][1])
 								vk.auth()
+
+								vk.method('wall.post', {'owner_id': GROUP_ID, 'message': post['text'], 'attachments': a})
 
 							time.sleep(random.randint(300, 3600))
 
