@@ -50,6 +50,7 @@ while True:
 							except:
 								acc = 1 - acc
 
+								print(acc)
 								vk = vk_api.VkApi(login=s[acc][0], password=s[acc][1])
 								vk.auth()
 
