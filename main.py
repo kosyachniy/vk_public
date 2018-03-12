@@ -2,6 +2,7 @@ from func.vk_user import *
 import json, time, random
 
 GROUP_ID = -163409528
+SERVER_PLUS_TIME = 3
 
 ''''''
 
@@ -48,22 +49,18 @@ while True:
 							try:
 								vk.method('wall.post', {'owner_id': GROUP_ID, 'message': post['text'], 'attachments': a})
 							except:
-								acc = 1 - acc
-
-								print(acc)
-								vk = vk_api.VkApi(login=s[acc][0], password=s[acc][1])
-								vk.auth()
-
-								vk.method('wall.post', {'owner_id': GROUP_ID, 'message': post['text'], 'attachments': a})
-
-							time.sleep(random.randint(300, 3600))
+								while True:
+									time.sleep(3600)
+									if 9 <= time.localtime().tm_hour + SERVER_PLUS_TIME <= 10:
+										break
+							else:
+								time.sleep(random.randint(300, 3600))
 
 			time.sleep(1)
 		#time.sleep(60)
 
-	except Exception as msg:
+	except:
 		with open('set.json', 'w') as file:
 			print(json.dumps({'groups': groups}, indent=4), file=file)
 
-		print(msg[2])
 		break
